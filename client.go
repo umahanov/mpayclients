@@ -1,4 +1,4 @@
-package mpayclients
+package mpayutils
 
 import (
 	"net/http"

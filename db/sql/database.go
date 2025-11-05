@@ -6,7 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
-	"gitlab.corp.mail.ru/oneui/backend/go-library/db"
+	"github.com/umahanov/mpayutils/db"
 	"golang.yandex/hasql/v2"
 )
 

@@ -6,21 +6,21 @@ import (
 	"errors"
 
 	"github.com/jmoiron/sqlx"
-	vksql "gitlab.corp.mail.ru/oneui/backend/go-library/db/sql"
-	"gitlab.corp.mail.ru/oneui/backend/go-library/log"
+	mpayutils "github.com/umahanov/mpayutils/db/sql"
+	"github.com/umahanov/mpayutils/log"
 	"go.uber.org/zap"
 	"golang.yandex/hasql/v2"
 )
 
 type postgresNode struct {
-	vksql.Queryable
-	vksql.SquirrelQueryable
+	mpayutils.Queryable
+	mpayutils.SquirrelQueryable
 	db *sqlx.DB
 }
 
 func newNodeFromHasql(node hasql.Node[*sql.DB]) *postgresNode {
 	sqlxDB := sqlx.NewDb(node.DB(), "pgx")
-	queryable := vksql.New(sqlxDB)
+	queryable := mpayutils.New(sqlxDB)
 
 	return &postgresNode{
 		Queryable: queryable,
@@ -32,11 +32,11 @@ func newNodeFromHasql(node hasql.Node[*sql.DB]) *postgresNode {
 	}
 }
 
-func (b *postgresNode) Tx(ctx context.Context, executable vksql.TransactionCallback) error {
+func (b *postgresNode) Tx(ctx context.Context, executable mpayutils.TransactionCallback) error {
 	return b.tx(ctx, executable)
 }
 
-func (b *postgresNode) tx(ctx context.Context, executable vksql.TransactionCallback) (err error) {
+func (b *postgresNode) tx(ctx context.Context, executable mpayutils.TransactionCallback) (err error) {
 	_tx, err := b.db.BeginTxx(ctx, nil)
 	if err != nil {
 		return errors.New("failed to initialize transaction")
@@ -57,11 +57,11 @@ func (b *postgresNode) tx(ctx context.Context, executable vksql.TransactionCallb
 	return err
 }
 
-func (b *postgresNode) ReadonlyTx(ctx context.Context, executable vksql.TransactionCallback) error {
+func (b *postgresNode) ReadonlyTx(ctx context.Context, executable mpayutils.TransactionCallback) error {
 	return b.readonlyTx(ctx, executable)
 }
 
-func (b *postgresNode) readonlyTx(ctx context.Context, executable vksql.TransactionCallback) (err error) {
+func (b *postgresNode) readonlyTx(ctx context.Context, executable mpayutils.TransactionCallback) (err error) {
 	_tx, err := b.db.BeginTxx(ctx, nil)
 	if err != nil {
 		log.Error(ctx, "failed to initialize transaction", zap.Error(err))

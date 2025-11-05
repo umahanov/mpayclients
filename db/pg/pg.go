@@ -9,8 +9,8 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/stdlib"
-	sqlx "gitlab.corp.mail.ru/oneui/backend/go-library/db/sql"
-	"gitlab.corp.mail.ru/oneui/backend/go-library/log"
+	sqlx "github.com/umahanov/mpayutils/db/sql"
+	"github.com/umahanov/mpayutils/log"
 	"go.uber.org/zap"
 
 	"golang.yandex/hasql/v2"

@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	sqlx "mpayclients/db/sql"
-	"mpayclients/db/sql/wrappers"
+	sqlx "github.com/umahanov/mpayutils/db/sql"
+	"github.com/umahanov/mpayutils/db/sql/wrappers"
 
 	"golang.yandex/hasql/v2"
 )

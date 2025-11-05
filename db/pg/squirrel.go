@@ -6,11 +6,11 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
-	vksql "gitlab.corp.mail.ru/oneui/backend/go-library/db/sql"
+	mpayutils "github.com/umahanov/mpayutils/db/sql"
 )
 
 type SquirrelQueryable struct {
-	Queryable vksql.Queryable
+	Queryable mpayutils.Queryable
 	Node      *sqlx.DB
 }
 

@@ -5,18 +5,18 @@ import (
 	"database/sql"
 
 	"github.com/jmoiron/sqlx"
-	vksql "gitlab.corp.mail.ru/oneui/backend/go-library/db/sql"
+	mpayutils "github.com/umahanov/mpayutils/db/sql"
 )
 
 type postgresTransaction struct {
-	vksql.Queryable
-	vksql.SquirrelQueryable
+	mpayutils.Queryable
+	mpayutils.SquirrelQueryable
 	tx   *sqlx.Tx //nolint
 	node *postgresNode
 }
 
 func newTransactionFromTx(tx *sqlx.Tx, node *postgresNode) *postgresTransaction {
-	queryable := vksql.New(tx)
+	queryable := mpayutils.New(tx)
 	return &postgresTransaction{
 		Queryable: queryable,
 		SquirrelQueryable: &SquirrelQueryable{
