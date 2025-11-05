@@ -16,17 +16,17 @@ import (
 	"golang.yandex/hasql/v2"
 )
 
-type BackendHost struct {
+type PgHost struct {
 	Host string `yaml:"host"`
 	Port int    `yaml:"port"`
 }
 
-type BackendConfig struct {
+type PgConfig struct {
 	DSN             string        `yaml:"dsn"`
 	Name            string        `yaml:"name"`
 	User            string        `yaml:"user"`
 	Password        string        `yaml:"password"`
-	Hosts           []BackendHost `yaml:"hosts"`
+	Hosts           []PgHost      `yaml:"hosts"`
 	ConnectTimeout  time.Duration `yaml:"connectTimeout"`
 	SSLMode         string        `yaml:"sslMode"`
 	MaxOpenConns    int           `yaml:"maxOpenConns"`
@@ -35,18 +35,18 @@ type BackendConfig struct {
 	MaxConnLifetime time.Duration `yaml:"maxConnLifetime"`
 }
 
-type Backend struct {
-	config  BackendConfig
+type hasqlCluster struct {
+	config  PgConfig
 	cluster *hasql.Cluster[*sql.DB]
 }
 
-var _ sqlx.Connectable = (*Backend)(nil)
+var _ sqlx.Connectable = (*hasqlCluster)(nil)
 
-func (b *Backend) Name() string {
+func (b *hasqlCluster) Name() string {
 	return "pg"
 }
 
-func NewBackend(config BackendConfig) Backend {
+func newHasqlCluster(config PgConfig) hasqlCluster {
 	if config.ConnectTimeout == 0 {
 		config.ConnectTimeout = 3 * time.Second
 	}
@@ -55,23 +55,23 @@ func NewBackend(config BackendConfig) Backend {
 		config.MaxIdleConns = 2
 	}
 
-	return Backend{
+	return hasqlCluster{
 		config: config,
 	}
 }
 
-func (b *Backend) getNode(ctx context.Context, preferNode hasql.NodeStateCriterion) (*hasql.Node[*sql.DB], error) {
+func (b *hasqlCluster) getNode(ctx context.Context, preferNode hasql.NodeStateCriterion) (*hasql.Node[*sql.DB], error) {
 	ctx, cancel := context.WithTimeout(ctx, b.config.ConnectTimeout)
 	defer cancel()
 
 	return b.cluster.WaitForNode(ctx, preferNode)
 }
 
-func (b *Backend) Hasql() *hasql.Cluster[*sql.DB] {
+func (b *hasqlCluster) Hasql() *hasql.Cluster[*sql.DB] {
 	return b.cluster
 }
 
-func (b *Backend) Connect(ctx context.Context) (err error) {
+func (b *hasqlCluster) Connect(ctx context.Context) (err error) {
 	log.Debug(ctx, "connecting to db")
 	if b.config.SSLMode == "" {
 		b.config.SSLMode = "verify-full"
@@ -171,7 +171,7 @@ func (b *Backend) Connect(ctx context.Context) (err error) {
 	return nil
 }
 
-func (b *Backend) Disconnect(_ context.Context) error {
+func (b *hasqlCluster) Disconnect(_ context.Context) error {
 	if b.cluster == nil {
 		return nil
 	}
@@ -184,7 +184,7 @@ func (b *Backend) Disconnect(_ context.Context) error {
 	return nil
 }
 
-func (b *Backend) BeginTx(ctx context.Context) (*sql.Tx, error) {
+func (b *hasqlCluster) BeginTx(ctx context.Context) (*sql.Tx, error) {
 	n, err := b.getNode(ctx, hasql.Primary)
 	if err != nil {
 		return nil, err

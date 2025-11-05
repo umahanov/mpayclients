@@ -11,21 +11,21 @@ import (
 )
 
 type PostgresCluster struct {
-	backend Backend
+	cluster hasqlCluster
 }
 
-func NewCluster(config BackendConfig) sqlx.Cluster {
+func NewCluster(config PgConfig) sqlx.Cluster {
 	return &PostgresCluster{
-		backend: NewBackend(config),
+		cluster: newHasqlCluster(config),
 	}
 }
 
 func (c *PostgresCluster) Hasql() *hasql.Cluster[*sql.DB] {
-	return c.backend.Hasql()
+	return c.cluster.Hasql()
 }
 
-func (c *PostgresCluster) GetDatabaseReal(ctx context.Context, dbType hasql.NodeStateCriterion) (sqlx.Database, error) {
-	node, err := c.backend.getNode(ctx, dbType)
+func (c *PostgresCluster) GetEagerDatabase(ctx context.Context, dbType hasql.NodeStateCriterion) (sqlx.Database, error) {
+	node, err := c.cluster.getNode(ctx, dbType)
 	if err != nil {
 		return nil, err
 	}
@@ -40,13 +40,13 @@ func (c *PostgresCluster) GetDatabase(dbType hasql.NodeStateCriterion) sqlx.Data
 }
 
 func (c *PostgresCluster) Connect(ctx context.Context) (err error) {
-	return c.backend.Connect(ctx)
+	return c.cluster.Connect(ctx)
 }
 
 func (c *PostgresCluster) Disconnect(ctx context.Context) error {
-	return c.backend.Disconnect(ctx)
+	return c.cluster.Disconnect(ctx)
 }
 
 func (c *PostgresCluster) Name() string {
-	return c.backend.Name()
+	return c.cluster.Name()
 }

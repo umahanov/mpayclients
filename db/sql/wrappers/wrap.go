@@ -16,7 +16,7 @@ type DatabaseWrap struct {
 }
 
 func (d DatabaseWrap) QueryxContext(ctx context.Context, query string, args ...any) (*sqlx.Rows, error) {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (d DatabaseWrap) QueryxContext(ctx context.Context, query string, args ...a
 }
 
 func (d DatabaseWrap) QueryRowxContext(ctx context.Context, query string, args ...any) *sqlx.Row {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return nil
 	}
@@ -32,7 +32,7 @@ func (d DatabaseWrap) QueryRowxContext(ctx context.Context, query string, args .
 }
 
 func (d DatabaseWrap) SelectContext(ctx context.Context, dest any, query string, args ...any) error {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func (d DatabaseWrap) SelectContext(ctx context.Context, dest any, query string,
 }
 
 func (d DatabaseWrap) GetContext(ctx context.Context, dest any, query string, args ...any) error {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ func (d DatabaseWrap) GetContext(ctx context.Context, dest any, query string, ar
 }
 
 func (d DatabaseWrap) ExecContext(ctx context.Context, query string, args ...any) (sql.Result, error) {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (d DatabaseWrap) ExecContext(ctx context.Context, query string, args ...any
 }
 
 func (d DatabaseWrap) QuerySq(ctx context.Context, query squirrel.Sqlizer) (*sqlx.Rows, error) {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (d DatabaseWrap) QuerySq(ctx context.Context, query squirrel.Sqlizer) (*sql
 }
 
 func (d DatabaseWrap) QueryRowSq(ctx context.Context, query squirrel.Sqlizer) (*sqlx.Row, error) {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (d DatabaseWrap) QueryRowSq(ctx context.Context, query squirrel.Sqlizer) (*
 }
 
 func (d DatabaseWrap) SelectSq(ctx context.Context, dest any, query squirrel.Sqlizer) error {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (d DatabaseWrap) SelectSq(ctx context.Context, dest any, query squirrel.Sql
 }
 
 func (d DatabaseWrap) GetSq(ctx context.Context, dest any, query squirrel.Sqlizer) error {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (d DatabaseWrap) GetSq(ctx context.Context, dest any, query squirrel.Sqlize
 }
 
 func (d DatabaseWrap) ExecSq(ctx context.Context, query squirrel.Sqlizer) (sql.Result, error) {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func (d DatabaseWrap) ExecSq(ctx context.Context, query squirrel.Sqlizer) (sql.R
 }
 
 func (d DatabaseWrap) Tx(ctx context.Context, callback vksql.TransactionCallback) error {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return err
 	}
@@ -104,7 +104,7 @@ func (d DatabaseWrap) Tx(ctx context.Context, callback vksql.TransactionCallback
 }
 
 func (d DatabaseWrap) ReadonlyTx(ctx context.Context, callback vksql.TransactionCallback) error {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return err
 	}
@@ -112,7 +112,7 @@ func (d DatabaseWrap) ReadonlyTx(ctx context.Context, callback vksql.Transaction
 }
 
 func (d DatabaseWrap) GetDB(ctx context.Context) (*sql.DB, error) {
-	node, err := d.Cluster.GetDatabaseReal(ctx, d.SelectedNode)
+	node, err := d.Cluster.GetEagerDatabase(ctx, d.SelectedNode)
 	if err != nil {
 		return nil, err
 	}

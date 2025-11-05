@@ -60,7 +60,7 @@ type Connectable interface {
 type Cluster interface {
 	Connectable
 	Hasql() *hasql.Cluster[*sql.DB]
-	GetDatabaseReal(ctx context.Context, dbType hasql.NodeStateCriterion) (Database, error)
+	GetEagerDatabase(ctx context.Context, dbType hasql.NodeStateCriterion) (Database, error)
 	GetDatabase(dbType hasql.NodeStateCriterion) Database
 }
 
